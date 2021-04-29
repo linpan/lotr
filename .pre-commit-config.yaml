@@ -1,0 +1,33 @@
+repos:
+  - repo: https://github.com/pre-commit/mirrors-isort
+    rev: v5.8.0
+    hooks:
+      - id: isort
+        args:
+          - "-l=88"
+          - "--multi-line=3"
+          - "--tc"
+          - "--up"
+          - "--force-grid-wrap=0"
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-docstring-first
+      - id: check-json
+      - id: check-yaml
+        exclude: (charts/*|.gitlab-ci.yml)
+      - id: debug-statements
+      - id: requirements-txt-fixer
+      - id: detect-private-key
+  - repo: https://github.com/pre-commit/pygrep-hooks
+    rev: v1.8.0
+    hooks:
+      - id: python-check-blanket-noqa
+      - id: python-use-type-annotations
+  - repo: https://github.com/ambv/black
+    rev: 21.4b2
+    hooks:
+      - id: black
+        language_version: python3.9
