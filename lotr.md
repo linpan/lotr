@@ -5,6 +5,7 @@
 | 变更者 | 变更时间 | 变更内容 | 版本 |备注|
 | :-----:| :-----: | :----: | :----: | :----: |
 | Hiro | 2021-04-28 | 初稿 | v0.28 |    |
+| Hiro | 2021-05-06 | 初稿 | v0.29 | add git hooks    |
 
 ## FastAPI项目开发规范
 
@@ -14,7 +15,8 @@
 - 虚拟环境: Virtualenv
 - python版本: Python3.8+
 - 部署文件: Docker
-- 测试: pytest
+- 测试: Pytest
+- Git 钩子: pre-commit
 
 要求每个项目使用单独的虚拟环境，环境依赖跟随项目.
 
@@ -841,6 +843,12 @@ black 是一个官方的 Python 代码格式化工具。 如果不想格式化�
 在这的代码不会被格式化
 # fmt: on
 ```
+
+### git hooks 自动化检查代码
+
+[**必须**] 项目根目录存放此文件`pre-commit-config.yaml`模板.
+
+提供`pre-commit-config.yaml` 文件封装的工具有： `isort`、 `black` 、`flake8` 和 `mypy`.
 
 # Code Review
 
