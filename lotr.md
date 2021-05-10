@@ -6,6 +6,7 @@
 | :-----:| :-----: | :----: | :----: | :----: |
 | Hiro | 2021-04-28 | 初稿 | v0.28 |    |
 | Hiro | 2021-05-06 | 初稿 | v0.29 | add git hooks    |
+| Hiro | 2021-05-06 | 初稿 | v0.29.1 | PEP731    |
 
 ## FastAPI项目开发规范
 
@@ -109,9 +110,9 @@
 
 ### 缩进
 
-【**必须**】 对于每级缩进，统一要求使用4个 空格 ，而非 tab 键。 `pylint:mixed-indentation`, bad-indentation.
+【**必须**】 对于每级缩进，统一要求使用4个 空格 ，而非 tab 键。 `pylint:mixed-indentation`, Anti-pattern-indentation.
 
-【**必须**】 续行，要求使用括号等定限界符，并且需要垂直对齐。 pylint:`bad-continuation`.
+【**必须**】 续行，要求使用括号等定限界符，并且需要垂直对齐。 pylint:`Anti-pattern-continuation`.
 
 ```bash
 
@@ -178,8 +179,8 @@ person = {
 }
 ```
 
-【**可选**】 对于 if 判断，一般来说尽量不要放置过多的判断条件。换行时增加 4 个额外的空格。 pylint:`bad-continuation`. pycodestyle:E129 visually indented line
-with same indent as next logical line.
+【**可选**】 对于 if 判断，一般来说尽量不要放置过多的判断条件。换行时增加 4 个额外的空格。 pylint:`Anti-pattern-continuation`. pycodestyle:E129 visually
+indented line with same indent as next logical line.
 
 ```bash
 # 更推荐：在续行中，增加额外的缩进级别。允许 and 操作符在前
@@ -507,13 +508,13 @@ x = 'name: {}; score: {}'.format(name, n)
 也可以将每个子串写入一个 io.StringIO 缓存中。) pylint:`consider-using-join`.
 
 ```bash
-# GOOD:
+# Best practice:
 items = ['<table>']
 for last_name, first_name in employee_list:
     items.append('<tr><td>%s, %s</td></tr>' % (last_name, first_name))
 items.append('</table>')
 employee_table = ''.join(items)
-# BAD:
+# Anti-pattern:
 employee_table = '<table>'
 for last_name, first_name in employee_list:
     employee_table += '<tr><td>%s, %s</td></tr>' % (last_name, first_name)
@@ -525,9 +526,9 @@ employee_table += '</table>'
 【**推荐**】 检查前缀和后缀时，使用 .startswith() 和 .endswith() 代替字符串切片
 
 ```bash
-# GOOD
+# Best practice
 if foo.startswith('bar'):
-# BAD
+# Anti-pattern
 if foo[:3] == 'bar':
 ```
 
@@ -592,9 +593,9 @@ x = a >= b and a or b
 【**必须**】 为提升可读性，在判断条件中应使用` is not`，而不使用` not ... is`。 pycodestyle:E714 `test for object identity should be 'is not'`.
 
 ```bash
-# GOOD
+# Best practice
 if foo is not None:
-# BAD
+# Anti-pattern
 if not foo is None:
 ```
 
@@ -610,7 +611,7 @@ if not foo is None:
 
 ```bash
 
-# GOOD 
+# Best practice 
 def foo(x):
     if x >= 0:
         return math.sqrt(x)
@@ -622,7 +623,7 @@ def bar(x):
         return None
     return math.sqrt(x)
     
-# BAD 
+# Anti-pattern 
 def foo(x):
     if x >= 0:
         return math.sqrt(x)
@@ -637,13 +638,13 @@ def bar(x):
 【**推荐**】 对于未知的条件分支或者不应该进入的分支，建议抛出异常，而不是返回一个值（比如说`None` 或`False`）。
 
 ```bash
-# GOOD 
+# Best practice 
 def f(x):
     if x in ('SUCCESS',):
         return True
     else:
         raise MyException()  # 如果一定不会走到的条件，可以增加异常，防止将来未知的语句执行。
-# BAD        
+# Anti-pattern        
  def f(x):
     if x in ('SUCCESS',):
         return True
@@ -653,7 +654,7 @@ def f(x):
 【**可选**】 if 与 else 尽量一起出现，而不是全部都是if子句。
 
 ```bash
-# GOOD 
+# Best practice 
 if condition:
     do_something()
 else:
@@ -667,7 +668,7 @@ if condition:
 #     pass
 
 
-# BAD 
+# Anti-pattern 
 if condition:
     do_something()
 if another_condition:  # 不能确定是否笔误为 elif ，还是开启全新一个if条件
@@ -681,11 +682,11 @@ else:
 【**必须**】 不要用` ==` 与 `True`、 `False` 进行布尔运算。 pylint:`singleton-comparison`.
 
 ```bash
-#  GOOD
+#  Best practice
 if greeting:
    pass
 
-# BAD    
+# Anti-pattern    
 if greeting == True:
    pass
 
@@ -697,14 +698,14 @@ if greeting is True:  # Worse ?
 【**必须**】 对序列（字符串、列表 、元组），空序列为 false 的情况。 pylint:`len-as-condition`.
 
 ```bash
-# GOOD 
+# Best practice 
 if not seq:
    pass
 
 if seq:
    pass
 
-# BAD    
+# Anti-pattern    
 if len(seq):
    pass
 
@@ -717,7 +718,7 @@ if not len(seq):
 【**必须**】 禁止超过1个for语句或过滤器表达式，否则使用传统for循环语句替代。
 
 ```bash
-# GOOD 
+# Best practice 
 number_list = [1, 2, 3, 10, 20, 55]
 odd = [i for i in number_list if i % 2 == 1]
 
@@ -726,14 +727,14 @@ for x in range(10):
     for y in range(5):
         if x * y > 10:
             result.append((x, y))
-# BAD
+# Anti-pattern
 result = [(x, y) for x in range(10) for y in range(5) if x * y > 10]  # for 语句
 ```
 
 【**推荐**】 列表推导式适用于简单场景。 如果语句过长，每个部分应该单独置于一行： 映射表达式， for语句， 过滤器表达式。
 
 ````bash
-# GOOD 
+# Best practice 
 fizzbuzz = []
 for n in range(100):
     if n % 3 == 0 and n % 5 == 0:
@@ -748,7 +749,7 @@ for n in range(100):
 
 for n in range(1, 11):
     print(n)
-# BAD 
+# Anti-pattern 
 # 条件过于复杂，应该采用for语句展开
 fizzbuzz = [
     f'fizzbuzz {n}' if n % 3 == 0 and n % 5 == 0
@@ -771,20 +772,33 @@ fizzbuzz = [
 【**必须**】 函数参数中，不允许出现可变类型变量作为默认值。 pylint:`dangerous-default-value`.
 
 ```bash
-# GOOD 
+# Best practice 
 def f(x=0, y=None, z=None):
     if y is None:
         y = []
     if z is None:
         z = {}
 
-# BAD 
+# Anti-pattern 
 def f(x=0, y=[], z={}):
     pass
 
 def f(a, b=time.time()):
     pass
     
+```
+
+### lambda 不可赋值变量
+
+Do not assign a lambda expression, use a def
+
+```bash
+  # Best practice 
+  def flatten_list():
+    return list(set(itertools.chain.from_iterable(x)))
+    
+  # Anti-pattern   
+   flatten = lambda x: list(set(itertools.chain.from_iterable(x)))
 ```
 
 ### 用 `has` 或 `is` 前缀命名布尔元素
