@@ -7,6 +7,7 @@
 | Hiro | 2021-04-28 | 初稿 | v0.28 |    |
 | Hiro | 2021-05-06 | 初稿 | v0.29 | add git hooks    |
 | Hiro | 2021-05-06 | 初稿 | v0.29.1 | PEP731    |
+| Hiro | 2021-05-11 | 初稿 | v0.29.2 | 接口文档    |
 
 ## FastAPI项目开发规范
 
@@ -68,6 +69,49 @@
 
 **算法工程的文档包含入门、API接口文档和教程三大部分.**
 
+接口文档示例：
+
+### POST /api/pool/autoscale/(.+)
+
+Autoscaling worker pool
+
+Request:
+
+```bash
+POST /api/worker/pool/autoscale/celery@worker2?min=3&max=10 HTTP/1.1
+
+Content-Type: application/x-www-form-urlencoded; charset=utf-8
+
+
+```
+
+Response:
+
+```bash
+HTTP/1.1 200 OK
+Content-Length: 66
+Content-Type: application/json; charset=UTF-8
+
+{
+    "message": "Autoscaling 'Spacex@worker2' worker (min=3, max=10)"
+}
+```
+
+### Query Parameters:
+
+- min – minimum amount pool processes
+- max – maximum amount pool processes
+
+### Request Headers:
+
+- Authorization –OAuth2 JWT token to authenticate
+
+### Status Codes:
+
+- 200 OK – no error
+- 401 Unauthorized – unauthorized request
+- 403 Forbidden – autoscaling is not enabled
+
 ### Git commit 规范
 
 所有项目的Commit Log的格式精确控制，增加可读性，便于查看变更历史，形成良好的git使用习惯:
@@ -93,8 +137,8 @@
 - filters()
 - all()
 - distinct()
-- first() # get first item
-- last() # get last item
+- first()  # get first item
+- last()  # get last item
 
 # Python 编码风格与规范
 
