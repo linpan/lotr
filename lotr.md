@@ -8,6 +8,8 @@
 | Hiro | 2021-05-06 | 初稿 | v0.29 | add git hooks    |
 | Hiro | 2021-05-06 | 初稿 | v0.29.1 | PEP731    |
 | Hiro | 2021-05-11 | 初稿 | v0.29.2 | 接口文档    |
+| Hiro | 2021-05-14 | 初稿 | v0.29.3 | 注释类型声明 |
+
 
 ## FastAPI项目开发规范
 
@@ -494,12 +496,12 @@ class Container(object):
 def greeting(name: str) -> str:
     return 'Hello ' + name
 
+```
 
-# 变量定义
-lang: str = 'zh'
-success_code: int = 0
-d: Dict[str, Any] = {'loc': loc, 'msg': msg, 'type': type_}
+对用重要的变量给予使用注释方式来类型标注:
 
+```
+self._bindings = {}  # type: Dict[str, Binding]
 ```
 
 【**必须**】 模块级变量，类和实例变量以及局部变量的注释应在冒号后面有一个空格。 pycodestyle:`E231 missing whitespace after ':'`.
