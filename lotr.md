@@ -9,7 +9,7 @@
 | Hiro | 2021-05-06 | 初稿 | v0.29.1 | PEP731    |
 | Hiro | 2021-05-11 | 初稿 | v0.29.2 | 接口文档    |
 | Hiro | 2021-05-14 | 初稿 | v0.29.3 | 注释类型声明 |
-
+| Hiro | 2021-05-14 | 初稿 | v0.29.4 | 算法结构 |
 
 ## FastAPI项目开发规范
 
@@ -44,7 +44,7 @@
     ├── version.py # 版本
     └── main.py  # 创建fastpi app及应用扩展
     └── exceptions.py
-├── DockerFile // 
+├── DockerFile /
 ├── ReadMe.md /
 
 ```
@@ -68,6 +68,28 @@
 - 项目的依赖
 - 安装及快速使用
 - ChangeLog记录
+
+**算法工程结构.**
+
+以 Ludwig [算法为例](https://github.com/ludwig-ai/ludwig)
+
+```
+
+├──transformer
+    ├── /scripts  # command cli
+    ├── /Ludwig  #算法包
+       ├── /models
+       ├── /utils
+       ├── cli.py 
+       ├── train.py 
+    ├── /api # api 接口
+    ├── /tests # 单元测试
+    ├── /example # 例子及用法
+    ├── /notebooks  ipynb 文件 
+    ├── /util # 其他通用的类或工具
+    ├── docker # docker 编排
+    └── version.py # 版本
+```
 
 **算法工程的文档包含入门、API接口文档和教程三大部分.**
 
