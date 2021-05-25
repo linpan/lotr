@@ -75,7 +75,7 @@
 
 ```
 
-├──transformer
+├──ludwing
     ├── /scripts  # command cli
     ├── /Ludwig  #算法包
        ├── /models
