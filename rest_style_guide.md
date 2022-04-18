@@ -2,16 +2,16 @@
 
 ## 版本管理
 
-| 变更者  |    变更时间    | 变更内容 |  版本  | 备注  |
-|:----:|:----------:|:----:|:----:|:---:|
-| Hiro | 2022-02-20 |  初稿  | v0.1 |     |
+| 变更者  |    变更时间    | 变更内容 |  版本  |   备注   |
+|:----:|:----------:|:----:|:----:|:------:|
+| Hiro | 2022-02-20 |  初稿  | v0.1 |        |
+| Hiro | 2022-04-20 |  初稿  | v0.2 | 新增更多例子 |
 
-
-## 文档语义
+## 语义解释
 
 为了避免歧义，文档大量使用了「能愿动词」，对应的解释如下：
 
-`必须 (MUST)`: 绝对，严格遵循，请照做，无条件遵守.
+`必须 (MUST)`:  绝对，严格遵循，请照做，无条件遵守.
 
 `一定不可 (MUST NOT)`: 禁令，严令禁止.
 
@@ -21,7 +21,7 @@
 
 ## 协议
 
-API 与客户端通讯协议主要包含 http 和 https，应该 使用 `HTTPS` 协议.
+API 与客户端通讯协议主要包含 http 和 https，`应该` 使用 `HTTPS` 协议.
 
 ## API 根域名
 
@@ -36,7 +36,7 @@ API 的根入口点应尽可能保持足够简单，这里有两个常见的 URL
 
 所有的 `API` 必须保持向后兼容，你 `必须` 在引入新版本 API 的同时确保旧版本 API 仍然可用。所以 `应该` 为其提供版本支持。
 
-目前比较常见的两种版本号形式：
+目前比较常见的版本号形式：
 
 ### 1. 在 URL 中嵌入版本编号
 
@@ -52,18 +52,7 @@ API 的根入口点应尽可能保持足够简单，这里有两个常见的 URL
 
 ```Accept-version: v1```
 
-### 4. 使用Accept标头进行版本控制
-
-``` 
-Accept: application/vnd.inspiration.v1+json
-Accept: application/vnd.inspiration+json;version=1.0
-```
-
-其中 vnd 表示 Standards Tree 标准树类型，有三个不同的树: x，prs 和 vnd。你使用的标准树需要取决于你开发的项目
-
-未注册的树（x）主要表示本地和私有环境 私有树（prs）主要表示没有商业发布的项目 供应商树（vnd）主要表示公开发布的项目 后面几个参数依次为应用名称（一般为应用域名）、版本号、期望的返回格式。
-
-## URI
+## URI格式
 
 URI语法由组件的层次结构序列组成:
 
@@ -72,50 +61,75 @@ URI语法由组件的层次结构序列组成:
         |           |            |            |        |
         scheme     authority       path        query   fragment
 
-端点就是指向特定资源或资源集合的 URL。在端点的设计中，你 必须 遵守下列约定：
+端点就是指向特定资源或资源集合的 URL。在端点的设计中，你 必须 `遵守` 下列约定：
 
-- URL 必须以字母开头，并且只能使用小写字母
-- URL 路径中的文字/表达式应使用连字符（-）分隔
-- URL 查询字符串中的文字/表达式应使用下划线（_）分隔, 
-  - 查询参数值必须为百分比编码, 
-  - 参数必须以字母开头，并且应全部小写。
-  - 只能使用字母字符，数字和下划线（_）字符,
-  - 查询参数应该是可选的。
-- URL 中资源（resource）的命名 `必须` 是名词，并且 `必须` 是复数形式
-- URI 中应该使用多个名词来标识数据资源的集合。
-    - /invoices
-    - /statements
-- URL 资源集合中的单个资源可以直接存在于集合URI的下面。
-    - /invoices/{invoice_id}
+#### URL 必须以字母开头，并且只能使用小写字母
 
-- URL 子资源集合可以直接存在于单个资源之下。这应该传达与另一个资源集合的关系（在此示例中为发票项目）。
-    - /invoices/{invoice_id}/items
-- URL 子资源的单个资源可以存在，但应避免使用顶级资源。
-    - /invoices/{invoice_id}/items/{item_id}
-    - 更好： /invoice-items/{invoice_item_id}
-- 不得有两个资源标识符，一个接一
-  - 例: https://api.foo.com/v1/payments/payments/12345/102030
-- 必须 优先使用 Restful 类型的 URL
-- URL `必须` 是易读的 -URL `一定不可` 暴露服务器架构
-- 单个资源上查询参数, 在使用一种资源的典型情况下（例如/v1/payments/billing-plans/P-45843EMUSK），不应使用查询参数.
-- 缓存友好的API
-  - 在极少数情况下，资源需要高度可缓存（通常是数据变化很小），可以使用查询参数，而不是POST+请求主体.
-  - 至于POST会做出反应不可缓存，GET最好在这些情况下。这是唯一可能需要查询参数的情况.
+    ✅ GOOD
+    https://api.inspiration.com/health
+
+    ❌ BAD
+    https://api.inspiration.com/getUser
+    https://api.inspiration.com/get_user
+
+#### URL 路径中的文字/表达式应使用连字符（-）分隔
+
+`https://api.inspiration.com/how-to-design-better-apis`
+
+#### URL 查询字符串中的文字/表达式应使用下划线（_）分隔,
+
+- 参数必须以字母开头，并且应全部小写。
+- 只能使用字母字符，数字和下划线（_）字符,
+- 查询参数应该是可选的。
+
+```
+https://api.inspiration.com/health?api_version=1.0
+```
+
+#### URL 中资源（resource）的命名 `必须` 是名词，并且优先 `应该` 是复数形式
+
+    https://api.inspiration.com/books
+
+#### URL 资源集合中的单个资源可以直接存在于集合URI的下面。
+
+      https://api.inspiration.com/invoices/{invoice_id}
+
+子资源集合可以直接存在于单个资源之下。这应该传达与另一个资源集合的关系
+
+    https://api.inspiration.com/invoices/{invoice_id}/items`
+
+子资源的单个资源可以存在，但应避免使用顶级资源
+
+    ❌ BAD
+    `: https://api.inspiration.com/invoices/{invoice_id}/items/{item_id}
+    
+    ✅ GOOD
+    https://api.inspiration.com/invoice-items/{invoice_item_id}`
+
+不得有两个资源标识符，一个接一
+
+    https://api.inspiration.com/payments/payments/12345/102030
+
+#### 缓存友好的API
+
+    - 在极少数情况下，资源需要高度可缓存（通常是数据变化很小），可以使用查询参数，而不是POST+请求主体.
+    - 至于POST会做出反应不可缓存，GET最好在这些情况下。这是唯一可能需要查询参数的情况.
 
 ## HTTP 动词
+
 ## Http Method
+
 对于资源的具体操作类型，由 HTTP 动词表示。常用的 HTTP 动词有下面五个（括号里是对应的 SQL 命令）。
 
 GET（SELECT）：从服务器取出资源（一项或多项）。
 
 POST（CREATE）：在服务器新建一个资源。
 
-PUT（UPDATE）：在服务器更新资源（客户端提供改变后的完整资源, 非幂等操作）此方法应该返回状态代码，
-204因为在大多数情况下，由于请求是要更新资源并且已成功更新，因此无需返回任何内容。
+PUT（UPDATE）：在服务器更新资源（客户端提供改变后的完整资源, `非幂等操作`）此方法应该返回状态代码， 204因为在大多数情况下，由于请求是要更新资源并且已成功更新，因此无需返回任何内容。
 
-PATCH（UPDATE）：在服务器更新资源(更新某些字段， 幂等操作)（客户端提供改变的属性）。
+PATCH（UPDATE）：在服务器更新资源(更新某些字段， `幂等操作`)（客户端提供改变的属性）。
 
-DELETE（DELETE）：从服务器删除资源 幂等操作。
+DELETE（DELETE）：从服务器删除资源 `幂等操作`。
 
 其中
 
@@ -152,19 +166,9 @@ DELETE（DELETE）：从服务器删除资源 幂等操作。
 | POST   | /zoos/{zoo}/employees            | 在特定的动物园雇佣一名员工    |
 | DELETE | /zoos/{zoo}/employees/{employee} | 从某个动物园解雇一名员工     |
 
-### 资源名称的说明
- - 资源名称对于单例`必须`为单数；集合的名称`必须`为复数
-   - 用户帐户上自动付款配置的说明
-     - GET /autopay 返回完整的表示形式
-   - 假设费用的集合：
-     - GET /charges 返回已收取的费用清单
-     - POST /charges 创建一个新的收费资源， /charges/1234
-     - GET /charges/1234 返回一次充电的完整表示
-
-
 ## Headers
 
-- HTTP标头以 camelCase + 连字符的语法编写，例如 Foo-Request-Id.
+- HTTP标头以 camelCase + 连字符的语法编写，例如 `Foo-Request-Id` or ` Request-Id`.
 
 - 自定义头信息`不是必须`的.
 
@@ -194,7 +198,8 @@ DELETE（DELETE）：从服务器删除资源 幂等操作。
 | 4xx | 客户端原因引起的错误                 |
 | 5xx | 服务端原因引起的错误                 |
 
-> 只有来自客户端的请求被正确的处理后才能返回 `2xx` 的响应，所以当 API 返回 `2xx` 类型的状态码时，前端 `必须` 认定该请求已处理成功。 必须强调的是，所有 `API` `一定不可` 返回 `1xx` 类型的状态码。当 `API` 发生错误时，`必须` 返回出错时的详细信息。
+> 只有来自客户端的请求被正确的处理后才能返回 `2xx` 的响应，所以当 API 返回 `2xx` 类型的状态码时，前端 `必须` 认定该请求已处理成功。
+> 必须强调的是，所有 `API` `一定不可` 返回 `1xx` 类型的状态码。当 `API` 发生错误时，`必须` 返回出错时的详细信息。
 
 
 2、直接放入响应实体中；
@@ -384,8 +389,8 @@ Connection: keep-alive
 ```
 
 ### 204 No Content
-没有要返回的实体主体.
-该状态码表示响应实体不包含任何数据，其中：
+
+没有要返回的实体主体. 该状态码表示响应实体不包含任何数据，其中：
 
 * 在使用 `DELETE` 方法删除资源 **成功** 时，`必须` 返回该状态码
 * 使用 `PUT`、`PATCH` 方法更新数据 **成功** 时，也 `应该` 返回此状态码
@@ -585,6 +590,7 @@ X-RateLimit-Remaining: 0 当前剩余的请求数量
 X-RateLimit-Reset: 1529839462 重置时间
 Retry-After: 120 下一次访问应该等待的时间（秒）
 ```
+
 例如:
 
 ```http
@@ -627,8 +633,88 @@ Connection: keep-alive
 
 其他 `HTTP` 状态码请参考[Http-StatusCode](https://zh.wikipedia.org/zh-hans/HTTP%E7%8A%B6%E6%80%81%E7%A0%81)
 
+## 分页
+
+```
+// Request => GET /users?page_number=1&page_size=15&after_id=20 
+
+// Response <= 200 OK
+{
+    "page_number": 1,
+    "page_size": 15,
+    "count": 378,
+    "data": [
+        // resources
+    ],
+    "total_pages": 26,
+    "has_previous_page": true,
+    "has_next_page": true
+}
+
+```
+
+### 其他实践
+
+#### 提供 health check
+
+`应该`提供一个端点（例如get /health）用于确定服务是否健康。此端点可以通过其他应用程序调用， 例如负载均衡器以在服务中断的情况下采取行动。
+
+#### ISO8601 UTC日期格式
+
+`必须` UTC日期格式
+
+```python
+{
+    "published_at": "2022-04-18T15:15:52.071106",
+    "created_at": "2022-04-18T07:19:35.920098+08:00"  # 东八区
+}
+
+```
+
+### 更新优先考虑 PATCH
+
+`PATCH`请求是对资源的部分更新，`应该`优先考虑. 而`PUT`是完全替代现有的资源 允许任务字段不受限制的任意更新是危险的操作.
+
+### 加载更多资源
+
+允许通过`expend`查询加载关联数据,避免多次往返请求.
+
+```json
+
+// Request => GET /users/T9hoBuuTL4?expand=orders&expand=orders.items
+
+// Response <= 200 OK
+{
+  "id": "T9hoBuuTL4",
+  "email": "Johe@inpiration.com",
+  "name": "John Doe",
+  "orders": [
+    {
+      "id": "Hy3SSXU1PF",
+      "items": [
+        {
+          "name": "API course"
+        },
+        {
+          "name": "iPhone 14"
+        }
+      ]
+    },
+    {
+      "id": "bx1zKmJLI6",
+      "items": [
+        {
+          "name": "SaaS subscription"
+        }
+      ]
+    }
+  ]
+}
+
+```
+
 ## Credit
 
 1. [PayPal](https://github.com/paypal/api-standards)
-
 2. [Microsoft](https://github.com/microsoft/api-guidelines/blob/vNext/Guidelines.md)
+3. [Stripe](https://stripe.com/docs/api)
